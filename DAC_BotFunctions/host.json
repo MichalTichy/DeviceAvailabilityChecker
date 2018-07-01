@@ -1,0 +1,4 @@
+{
+  "apiUrl": "https://remotedesktopavaliability.azurewebsites.net",
+  "minutesBetweenContacts": "5"
+}
