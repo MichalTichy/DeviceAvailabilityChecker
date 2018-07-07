@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
-using DAC_BotFunctions;
 using DAC_Common;
 using DAC_DAL;
 using Microsoft.Bot.Builder.Dialogs;
@@ -16,7 +16,17 @@ namespace DAC_BotFunctions.Messages.Reactions
             var name = message.GetMessageParts().ElementAt(1);
             var address = message.GetMessageParts().ElementAt(2);
             var group = message.GetMessageParts().ElementAt(3);
-            await RegisterDevice(context, message, name, address,group);
+            try
+            {
+                await RegisterDevice(name, address, group);
+                await context.PostAsync("Device registered.");
+
+            }
+            catch (Exception e)
+            {
+                await context.PostAsync("Device registration failed");
+                throw;
+            }
         }
 
         public string GetHelpText()
@@ -24,7 +34,7 @@ namespace DAC_BotFunctions.Messages.Reactions
             return "/registerDevice {name} {address} {group} - adds device to be watched";
         }
 
-        private async Task RegisterDevice(IDialogContext context, IMessageActivity message, string name, string address, string group)
+        private async Task RegisterDevice(string name, string address, string group)
         {
 
             var device = new DeviceReport()
@@ -36,7 +46,6 @@ namespace DAC_BotFunctions.Messages.Reactions
             var dataSource = new DataSource();
             await dataSource.Init();
             await dataSource.RegisterDevice(device);
-            await context.PostAsync("Device registered.");
         }
 
         public static bool IsReactionValid(IMessageActivity message)

@@ -22,7 +22,7 @@ namespace DAC_Pinger
 
         public async Task<ICollection<DeviceReport>> GetAll()
         {
-            var targetUri = new Uri(baseUrl, "api");
+            var targetUri = new Uri(baseUrl, "api/devices");
 
             using (var client = new HttpClient())
             using (HttpResponseMessage res = await client.GetAsync(targetUri))
@@ -34,8 +34,8 @@ namespace DAC_Pinger
         }
 
         public async Task ReportStatus(DeviceReport device)
-        {
-            var targetUri = new Uri(baseUrl, $"api/{device.Group}/{device.Address}");
+      {
+            var targetUri = new Uri(baseUrl, $"api/spot/{device.Group}/{device.Address}");
             using (var client = new HttpClient())
 
             using (HttpResponseMessage res = await client.GetAsync(targetUri))

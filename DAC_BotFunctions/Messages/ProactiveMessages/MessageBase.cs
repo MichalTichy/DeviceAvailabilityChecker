@@ -9,7 +9,7 @@ namespace DAC_BotFunctions.Messages.ProactiveMessages
 {
     public abstract class MessageBase : IMessage
     {
-        public async void Send()
+        public async Task Send()
         {
             var message = await Build();
             if (message == null)
@@ -48,6 +48,7 @@ namespace DAC_BotFunctions.Messages.ProactiveMessages
         }
 
         public abstract Task<string> Build();
-        public abstract Task<IEnumerable<BotSubscription>> GetRecipients();
+        protected abstract Task<IEnumerable<BotSubscription>> GetRecipients();
+        
     }
 }

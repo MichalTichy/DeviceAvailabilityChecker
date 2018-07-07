@@ -11,7 +11,7 @@ namespace DAC_BotFunctions
         {
             return message
                 .Text
-                .Replace("<at>PcStatusBot</at>", "")
+                .Replace("<at>DeviceStatus</at>", "")
                 .Trim()
                 .Split(new[] {' ', (char) 160}, StringSplitOptions.RemoveEmptyEntries);   
         }

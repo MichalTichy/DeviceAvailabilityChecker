@@ -11,6 +11,7 @@ namespace DAC_BotFunctions.Messages.Reactions
     {
         public async void Execute(IDialogContext context, IMessageActivity message)
         {
+
             var groupName = message.GetMessageParts().ElementAt(1);
             await RegisterSubscription(message, groupName);
             await context.PostAsync("The subscription has been registered successfully.");

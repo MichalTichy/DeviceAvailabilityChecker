@@ -2,9 +2,8 @@
 
 namespace DAC_DAL
 {
-    public class EnvironmentVariables
+    public class DalEnvironmentVariables
     {
-
         public static string StorageAccount = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
     }
 }

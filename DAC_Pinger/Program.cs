@@ -13,16 +13,19 @@ namespace DAC_Pinger
         {
             while (true)
             {
-                PerformRemoteAvailabilityCheck().RunSynchronously();
+                PerformRemoteAvailabilityCheck();
                 Thread.Sleep(TimeSpan.FromMinutes(Configuration.TimeBetweenPings));
             }
         }
 
-        private static async Task PerformRemoteAvailabilityCheck()
+        private static void PerformRemoteAvailabilityCheck()
         {
-            Log("Checking Device status");
+            Log("Checking status of devices");
             var connector = new ApiConnector(Configuration.ApiUrl);
-            var devices = await connector.GetAll();
+            var devices = connector.GetAll().Result;
+
+            Log($"Found {devices.Count} devices");
+
             foreach (var device in devices)
             {
 

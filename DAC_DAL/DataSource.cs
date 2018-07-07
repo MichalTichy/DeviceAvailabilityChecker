@@ -21,7 +21,7 @@ namespace DAC_DAL
 
         static DataSource()
         {
-            cloudStorageAccount= CloudStorageAccount.Parse(EnvironmentVariables.StorageAccount);
+            cloudStorageAccount= CloudStorageAccount.Parse(DalEnvironmentVariables.StorageAccount);
 
         }
 
@@ -163,6 +163,18 @@ namespace DAC_DAL
             var operation = TableOperation.Insert(deviceEntity);
             await devicesTable.ExecuteAsync(operation);
 
+        }
+
+        public async Task UnregisterDevice(string group, string address)
+        {
+
+            var operation = TableOperation.Delete(new DeviceEntity()
+            {
+                Group = group,
+                Address = address
+            });
+
+            await devicesTable.ExecuteAsync(operation);
         }
     }
 }
