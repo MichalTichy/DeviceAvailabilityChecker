@@ -88,12 +88,12 @@ namespace DAC_DAL
             var partitionKey = DeviceSpot.GetPartitionKey(deviceEntity);
 
             var query = new TableQuery<DeviceSpot>().Where(
-                    TableQuery.GenerateFilterCondition(nameof(deviceEntity.Group), QueryComparisons.Equal,
+                    TableQuery.GenerateFilterCondition(nameof(deviceEntity.PartitionKey), QueryComparisons.Equal,
                         partitionKey))
                 .Take(1);
 
             var result = await spotsTable.ExecuteQuerySegmentedAsync(query,new TableContinuationToken());
-            return result.Results.Single();
+            return result.Results.SingleOrDefault();
         }
 
 
@@ -136,23 +136,34 @@ namespace DAC_DAL
 
         }
 
-        public async Task<IEnumerable<DeviceReport>> GetUnavailableDevices()
+        public async Task<IEnumerable<DeviceReport>> GetUnavailableDeviceReports()
         {
             var devices = await GetAllDeviceEntities();
 
             var unavailableDevices=new List<DeviceReport>();
-            var expectedTimeBetweenReports = DAC_Common.EnvironmentVariables.DelayInMinutesBetweenContacts;
-            var allowedMissedContacts = DAC_Common.EnvironmentVariables.NumberOfAllowedMissedContacts;
             foreach (var device in devices)
             {
                 var deviceModel = await GetDeviceModel(device);
-                if (!deviceModel.LastSeen.HasValue || deviceModel.LastSeen.Value.AddMinutes(expectedTimeBetweenReports*allowedMissedContacts)<DateTime.Now)
+                if (deviceModel.IsUnavailable)
                 {
                     unavailableDevices.Add(deviceModel);
                 }
             }
 
             return unavailableDevices;
+        }
+        public async Task<IEnumerable<DeviceReport>> GetDeviceReports()
+        {
+            var devices = await GetAllDeviceEntities();
+            var deviceModels=new List<DeviceReport>();
+            foreach (var device in devices)
+            {
+                var deviceModel = await GetDeviceModel(device);
+                deviceModels.Add(deviceModel);
+
+            }
+
+            return deviceModels;
         }
 
         public async Task RegisterDevice(DeviceReport device)

@@ -27,5 +27,12 @@ namespace DAC_BotFunctions
 
             return usePastTense ? "were" : "are";
         }
+        public static string GetCorrectNoun<T>(this IEnumerable<T> collection)
+        {
+            if (collection.Count() == 1)
+                return nameof(T);
+
+            return $"{nameof(T)}s";
+        }
     }
 }

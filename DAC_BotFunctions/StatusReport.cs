@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using DAC_BotFunctions.Messages.ProactiveMessages;
+using DAC_BotFunctions.Subscription;
 using DAC_DAL;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
@@ -11,18 +12,20 @@ namespace DAC_BotFunctions
     public static class StatusReport
     {
         [FunctionName("StatusReport")]
-        public static async Task Run([TimerTrigger("*/5 * * * *")]TimerInfo myTimer, TraceWriter log)
+        public static async Task Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, TraceWriter log)
         {
             using (BotService.Initialize())
             {
+                var store = await Helper.ConfigStore.Load();
                 var dataSource = new DataSource();
                 await dataSource.Init();
-                var unavailableDevices = await dataSource.GetUnavailableDevices();
+                var unavailableDevices = await dataSource.GetUnavailableDeviceReports();
 
                 foreach (var deviceGroup in unavailableDevices.GroupBy(t=>t.Group))
                 {
-                    var message=new FoundUnavailableDevicesInGroupMessage(deviceGroup.Key,deviceGroup.ToList());
-                    await message.Send();
+                    var message=new DeviceStatusMessage(deviceGroup.ToList());
+                    var recipients = store.Subscriptions.Where(t => t.GroupName == deviceGroup.Key);
+                    await message.SendMessageToChannel("Found unavailable devices!", recipients);
                 }
             }
         }

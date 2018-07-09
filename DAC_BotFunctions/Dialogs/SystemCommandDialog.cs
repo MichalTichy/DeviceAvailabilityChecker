@@ -47,6 +47,10 @@ namespace DAC_BotFunctions.Dialogs
             {
                 reaction = new RegisterDeviceBotReaction();
             }
+            else if (ReportStatusReaction.IsValidReaction(message))
+            {
+                reaction=new ReportStatusReaction();
+            }
             else
             {
                 reaction = new HelpReaction();

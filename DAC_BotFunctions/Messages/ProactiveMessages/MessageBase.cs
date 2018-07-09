@@ -9,20 +9,7 @@ namespace DAC_BotFunctions.Messages.ProactiveMessages
 {
     public abstract class MessageBase : IMessage
     {
-        public async Task Send()
-        {
-            var message = await Build();
-            if (message == null)
-                return;
-
-            var recipients = await GetRecipients();
-            foreach (var recipient in recipients)
-            {
-                await SendMessageToChannel("Unavailable devices detected!", message, recipient);
-            }
-        }
-        
-        protected async Task SendMessageToChannel(string title, string message, BotSubscription subscription)
+        public async Task SendMessageToChannel(string title, BotSubscription subscription)
         {
             var channelData = new TeamsChannelData
             {
@@ -33,7 +20,8 @@ namespace DAC_BotFunctions.Messages.ProactiveMessages
 
             var newMessage = Activity.CreateMessageActivity();
             newMessage.Type = ActivityTypes.Message;
-            newMessage.Text = message;
+            var newMessageText = await Build();
+            newMessage.Text = newMessageText.FixNewLines();
             var conversationParams = new ConversationParameters(
                 isGroup: true,
                 bot: null,
@@ -47,8 +35,14 @@ namespace DAC_BotFunctions.Messages.ProactiveMessages
             var result = await connector.Conversations.CreateConversationAsync(conversationParams);
         }
 
+        public async Task SendMessageToChannel(string title, IEnumerable<BotSubscription> subscriptions)
+        {
+            foreach (var botSubscription in subscriptions)
+            {
+                await SendMessageToChannel(title, botSubscription);
+            }
+        }
+
         public abstract Task<string> Build();
-        protected abstract Task<IEnumerable<BotSubscription>> GetRecipients();
-        
     }
 }
