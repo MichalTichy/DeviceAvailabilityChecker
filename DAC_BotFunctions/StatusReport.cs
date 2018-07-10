@@ -17,9 +17,8 @@ namespace DAC_BotFunctions
             using (BotService.Initialize())
             {
                 var store = await Helper.ConfigStore.Load();
-                var dataSource = new DataSource();
-                await dataSource.Init();
-                var unavailableDevices = await dataSource.GetUnavailableDeviceReports();
+                var reportsFacade = new ReportsFacade();
+                var unavailableDevices = await reportsFacade.GetUnavailableDeviceReports();
 
                 foreach (var deviceGroup in unavailableDevices.GroupBy(t=>t.Group))
                 {

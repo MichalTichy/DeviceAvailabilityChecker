@@ -32,10 +32,9 @@ namespace DAC_BotFunctions.Messages.Reactions
 
         private async Task UnregisterDevice(IMessageActivity message, string group, string address)
         {
-            var dataSource = new DataSource();
-            await dataSource.Init();
+            var deviceFacade = new DeviceFacade();
 
-            await dataSource.UnregisterDevice(group, address);
+            await deviceFacade.UnregisterDevice(group, address);
         }
 
         public static bool IsReactionValid(IMessageActivity message)

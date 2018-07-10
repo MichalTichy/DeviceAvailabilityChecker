@@ -31,9 +31,8 @@ namespace DAC_BotFunctions.Messages.Reactions
 
         protected async Task<string> ReportStatus(IMessageActivity message, string groupName)
         {
-            var datasource = new DataSource();
-            await datasource.Init();
-            var devices = await datasource.GetDeviceReports();
+            var reportsFacade = new ReportsFacade();
+            var devices = await reportsFacade.GetDeviceReports();
 
             var replyMessage=new ProactiveMessages.DeviceStatusMessage(devices.Where(t=>t.Group==groupName));
             return await replyMessage.Build();

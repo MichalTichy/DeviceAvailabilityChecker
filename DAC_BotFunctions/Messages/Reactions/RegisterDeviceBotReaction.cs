@@ -43,9 +43,9 @@ namespace DAC_BotFunctions.Messages.Reactions
                 Name = name,
                 Group = group
             };
-            var dataSource = new DataSource();
-            await dataSource.Init();
-            await dataSource.RegisterDevice(device);
+
+            var deviceFacade = new DeviceFacade();
+            await deviceFacade.RegisterDevice(device);
         }
 
         public static bool IsReactionValid(IMessageActivity message)

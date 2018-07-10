@@ -13,9 +13,8 @@ namespace DAC_ApiFunctions
         [FunctionName("GetAll")]
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "devices")]HttpRequestMessage req, TraceWriter log)
         {
-            var dataSource = new DataSource();
-            await dataSource.Init();
-            var devices = await dataSource.GetAllDevices();
+            var deviceFacade = new DeviceFacade();
+            var devices = await deviceFacade.GetAllDevices();
 
             return req.CreateResponse(HttpStatusCode.OK, devices);
 

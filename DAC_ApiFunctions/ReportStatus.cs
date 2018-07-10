@@ -13,10 +13,9 @@ namespace DAC_ApiFunctions
         [FunctionName("ReportSpottedDevice")]
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "spot/{group}/{address}")]HttpRequestMessage req,string group, string address,TraceWriter log)
         {
-            var dataSource = new DataSource();
-            await dataSource.Init();
+            var reportsFacade = new ReportsFacade();
 
-            await dataSource.ReportDeviceSpot(group, address);
+            await reportsFacade.ReportDeviceSpot(group, address);
 
             return req.CreateResponse(HttpStatusCode.OK);
         }
