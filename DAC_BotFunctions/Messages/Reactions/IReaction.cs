@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using DAC_BotFunctions.Subscription;
 using DAC_DAL;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;

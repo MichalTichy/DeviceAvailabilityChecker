@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DAC_DAL;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
@@ -30,13 +31,12 @@ namespace DAC_BotFunctions.Messages.Reactions
 
         private async Task<string> ListSubscriptions(string messageChannelId)
         {
-            var config = await Helper.ConfigStore.Load();
-
+            var subscriptionFacade = new SubscriptionFacade();
             var sb = new StringBuilder();
 
-            foreach (var subscription in config.Subscriptions.OrderBy(t=>t.ChannelId))
+            foreach (var subscription in await subscriptionFacade.GetAllSubscriptionsWithChannelId(messageChannelId))
             {
-                sb.AppendLine($"{subscription.Id} - {subscription.GroupName} - {subscription.TeamId}");
+                sb.AppendLine($"{subscription.GroupName}");
             }
 
             return sb.ToString();

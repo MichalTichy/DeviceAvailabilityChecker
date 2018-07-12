@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using DAC_BotFunctions.Messages.ProactiveMessages;
-using DAC_BotFunctions.Subscription;
 using DAC_DAL;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
@@ -16,14 +15,14 @@ namespace DAC_BotFunctions
         {
             using (BotService.Initialize())
             {
-                var store = await Helper.ConfigStore.Load();
+                var subscriptionFacade = new SubscriptionFacade();
                 var reportsFacade = new ReportsFacade();
                 var unavailableDevices = await reportsFacade.GetUnavailableDeviceReports();
 
                 foreach (var deviceGroup in unavailableDevices.GroupBy(t=>t.Group))
                 {
                     var message=new DeviceStatusMessage(deviceGroup.ToList());
-                    var recipients = store.Subscriptions.Where(t => t.GroupName == deviceGroup.Key);
+                    var recipients = await subscriptionFacade.GetAllSubscriptionsWithGroup(deviceGroup.Key);
                     await message.SendMessageToChannel("Found unavailable devices!", recipients);
                 }
             }

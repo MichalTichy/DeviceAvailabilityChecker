@@ -9,6 +9,7 @@ namespace DAC_DAL
     {
         protected static CloudTable devicesTable;
         protected static CloudTable spotsTable;
+        protected static CloudTable subscriptionsTable;
 
         protected static CloudStorageAccount cloudStorageAccount;
         internal DataSourceBase()
@@ -30,6 +31,11 @@ namespace DAC_DAL
             if (spotsTable == null)
             {
                 spotsTable = tableClient.GetTableReference("Spots"); 
+            }
+
+            if (subscriptionsTable == null)
+            {
+                spotsTable = tableClient.GetTableReference("Subscriptions"); 
             }
         }
 

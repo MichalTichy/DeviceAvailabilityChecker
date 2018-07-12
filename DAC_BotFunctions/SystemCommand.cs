@@ -18,6 +18,7 @@ namespace DAC_BotFunctions
         [FunctionName("SystemCommand")]
         public static async Task<object> Run([HttpTrigger] HttpRequestMessage req, TraceWriter log)
         {
+
             // Initialize the azure bot
             using (BotService.Initialize())
             {

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DAC_BotFunctions.Messages.Reactions;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using Microsoft.WindowsAzure.Storage;
 
 namespace DAC_BotFunctions.Dialogs
 {
@@ -14,6 +15,10 @@ namespace DAC_BotFunctions.Dialogs
             try
             {
                 context.Wait(MessageReceivedAsync);
+            }
+            catch (StorageException storageException)
+            {
+                context.PostAsync(storageException.RequestInformation.HttpStatusMessage).RunSynchronously();
             }
             catch (OperationCanceledException error)
             {

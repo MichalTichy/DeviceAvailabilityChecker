@@ -8,24 +8,24 @@ namespace DAC_DAL
 {
     internal class DeviceSpotDataSource : DataSourceBase
     {
-        public TableQuery<DeviceSpot> GetLastSpotQuery(DeviceEntity deviceEntity)
+        public TableQuery<DeviceSpotEntity> GetLastSpotQuery(DeviceEntity deviceEntity)
         {
-            var partitionKey = DeviceSpot.GetPartitionKey(deviceEntity);
+            var partitionKey = DeviceSpotEntity.GetPartitionKey(deviceEntity);
 
-            return new TableQuery<DeviceSpot>().Where(
+            return new TableQuery<DeviceSpotEntity>().Where(
                     TableQuery.GenerateFilterCondition(nameof(deviceEntity.PartitionKey), QueryComparisons.Equal,
                         partitionKey))
                 .Take(1);
         }
-        public async Task<DeviceSpot> GetLastSpot(DeviceEntity device)
+        public async Task<DeviceSpotEntity> GetLastSpot(DeviceEntity device)
         {
             var deviceSpots = await ExecuteQuery(spotsTable, GetLastSpotQuery(device));
             return deviceSpots.SingleOrDefault();
         }
 
-        private static DeviceSpot CreateDeviceSpot(DeviceEntity device)
+        private static DeviceSpotEntity CreateDeviceSpot(DeviceEntity device)
         {
-            var deviceSpot = new DeviceSpot()
+            var deviceSpot = new DeviceSpotEntity()
             {
                 DeviceEntity = device,
                 Date = DateTime.Now

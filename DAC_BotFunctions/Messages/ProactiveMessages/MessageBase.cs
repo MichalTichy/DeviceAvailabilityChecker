@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DAC_BotFunctions.Subscription;
+using DAC_Common;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Connector.Teams.Models;
 

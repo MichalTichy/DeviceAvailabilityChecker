@@ -1,11 +1,7 @@
-﻿using System;
-
-namespace DAC_BotFunctions.Subscription
+﻿namespace DAC_Common
 {
     public class BotSubscription
     {
-        public Guid Id { get; set; }
-
         public string ChannelId { get; set; }
         public string TeamId { get; set; }
 

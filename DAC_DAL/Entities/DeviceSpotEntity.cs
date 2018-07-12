@@ -3,7 +3,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 
 namespace DAC_DAL.Entities
 {
-    public class DeviceSpot : TableEntity
+    public class DeviceSpotEntity : TableEntity
     {
         public DeviceEntity DeviceEntity { get; set; }
         public DateTime Date { get; set; }
