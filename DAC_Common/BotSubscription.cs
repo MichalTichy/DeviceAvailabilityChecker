@@ -1,4 +1,6 @@
-﻿namespace DAC_Common
+﻿using System;
+
+namespace DAC_Common
 {
     public class BotSubscription
     {
@@ -9,5 +11,13 @@
 
         public string GroupName { get; set; }
         public string TenantId { get; set; }
+        public LastActivity LastActivity { get; set; }
+    }
+
+    public class LastActivity
+    {
+        public DateTime Created { get; set; } = DateTime.Now;
+        public string ConversationId { get; set; }
+        public string ActitityId { get; set; }
     }
 }

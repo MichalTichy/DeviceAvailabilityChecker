@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAzure.Storage.Table;
+﻿using DAC_Common;
+using Microsoft.WindowsAzure.Storage.Table;
 
 namespace DAC_DAL.Entities
 {
@@ -21,5 +22,7 @@ namespace DAC_DAL.Entities
         }
 
         public string TenantId { get; set; }
+
+        public LastActivity LastActivity { get; set; }
     }
 }

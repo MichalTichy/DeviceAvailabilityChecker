@@ -37,6 +37,12 @@ namespace DAC_DAL
             var operation = TableOperation.Insert(device);
             await devicesTable.ExecuteAsync(operation);
         }
+
+        public async Task UpdateSubscription(BotSubscriptionEntity device)
+        {
+            var operation = TableOperation.InsertOrReplace(device);
+            await devicesTable.ExecuteAsync(operation);
+        }
         
         public async Task UnregisterSubscription(string group, string channelId)
         {

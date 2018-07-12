@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DAC_Common;
+using DAC_DAL;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Connector.Teams.Models;
 
@@ -11,6 +12,7 @@ namespace DAC_BotFunctions.Messages.ProactiveMessages
     {
         public async Task SendMessageToChannel(string title, BotSubscription subscription)
         {
+            var subscriptionFacade = new SubscriptionFacade();
             var channelData = new TeamsChannelData
             {
                 Channel = new ChannelInfo(subscription.ChannelId),
@@ -18,10 +20,13 @@ namespace DAC_BotFunctions.Messages.ProactiveMessages
                 Tenant = new TenantInfo(subscription.TenantId)
             };
 
-            var newMessage = Activity.CreateMessageActivity();
-            newMessage.Type = ActivityTypes.Message;
             var newMessageText = await Build();
-            newMessage.Text = newMessageText.FixNewLines();
+
+            var newMessage = new Activity
+            {
+                Type = ActivityTypes.Message,
+                Text = newMessageText.FixNewLines(),
+            };
             var conversationParams = new ConversationParameters(
                 isGroup: true,
                 bot: null,
@@ -32,7 +37,24 @@ namespace DAC_BotFunctions.Messages.ProactiveMessages
 
             var connector = new ConnectorClient(new Uri(subscription.ServiceUrl), Environment.GetEnvironmentVariable("MicrosoftAppId"), Environment.GetEnvironmentVariable("MicrosoftAppPassword"));
             MicrosoftAppCredentials.TrustServiceUrl(subscription.ServiceUrl, DateTime.MaxValue);
-            var result = await connector.Conversations.CreateConversationAsync(conversationParams);
+            
+            if (subscription.LastActivity == null)
+            {
+                var result = await connector.Conversations.CreateConversationAsync(conversationParams);
+                subscription.LastActivity = new LastActivity
+                {
+                    ConversationId = result.Id,
+                    ActitityId = result.ActivityId
+                };
+            }
+            else
+            {
+                var result = await connector.Conversations.UpdateActivityAsync(subscription.LastActivity.ConversationId,subscription.LastActivity.ActitityId,newMessage);
+                subscription.LastActivity.ActitityId = result.Id;
+            }
+
+            await subscriptionFacade.UpdateBotSubscription(subscription);
+
         }
 
         public async Task SendMessageToChannel(string title, IEnumerable<BotSubscription> subscriptions)

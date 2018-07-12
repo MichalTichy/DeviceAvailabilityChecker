@@ -17,6 +17,12 @@ namespace DAC_DAL
             await SubscriptionDataSource.RegisterSubscription(entity);
         }
 
+        public async Task UpdateBotSubscription(BotSubscription subscription)
+        {
+            var entity = CreateBotSubscription(subscription);
+            await SubscriptionDataSource.UpdateSubscription(entity);
+        }
+
         public async Task UnregisterBotSubscription(string channelId, string @group)
         {
             await SubscriptionDataSource.UnregisterSubscription(@group,channelId);
@@ -46,7 +52,8 @@ namespace DAC_DAL
                 GroupName = subscription.GroupName,
                 ServiceUrl = subscription.ServiceUrl,
                 TeamId = subscription.TeamId,
-                TenantId = subscription.TeamId
+                TenantId = subscription.TeamId,
+                LastActivity = subscription.LastActivity
             };
         }
 
@@ -58,7 +65,8 @@ namespace DAC_DAL
                 GroupName = entity.GroupName,
                 ServiceUrl = entity.ServiceUrl,
                 TeamId = entity.TeamId,
-                TenantId = entity.TenantId
+                TenantId = entity.TenantId,
+                LastActivity = entity.LastActivity
             };
         }
     }

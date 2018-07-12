@@ -24,18 +24,20 @@ namespace DAC_DAL
             {
 
                 devicesTable = tableClient.GetTableReference("Devices");
-                devicesTable.CreateIfNotExistsAsync();
+                devicesTable.CreateIfNotExistsAsync().RunSynchronously();
 
             }
 
             if (spotsTable == null)
             {
                 spotsTable = tableClient.GetTableReference("Spots"); 
+                spotsTable.CreateIfNotExistsAsync().RunSynchronously();
             }
 
             if (subscriptionsTable == null)
             {
-                spotsTable = tableClient.GetTableReference("Subscriptions"); 
+                subscriptionsTable = tableClient.GetTableReference("Subscriptions");
+                subscriptionsTable.CreateIfNotExistsAsync().RunSynchronously();
             }
         }
 
