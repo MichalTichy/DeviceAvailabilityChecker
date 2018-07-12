@@ -16,10 +16,6 @@ namespace DAC_BotFunctions.Dialogs
             {
                 context.Wait(MessageReceivedAsync);
             }
-            catch (StorageException storageException)
-            {
-                context.PostAsync(storageException.RequestInformation.HttpStatusMessage).RunSynchronously();
-            }
             catch (OperationCanceledException error)
             {
                 return Task.FromCanceled(error.CancellationToken);

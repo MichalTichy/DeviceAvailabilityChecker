@@ -26,7 +26,7 @@ namespace DAC_DAL
 
         public async Task<IEnumerable<BotSubscriptionEntity>> GetAllSubscriptions()
         {
-            return await ExecuteQuery(devicesTable, GetAllSubscriptionsQuery());
+            return await ExecuteQuery(subscriptionsTable, GetAllSubscriptionsQuery());
         }
 
        
@@ -35,13 +35,13 @@ namespace DAC_DAL
         public async Task RegisterSubscription(BotSubscriptionEntity device)
         {
             var operation = TableOperation.Insert(device);
-            await devicesTable.ExecuteAsync(operation);
+            await subscriptionsTable.ExecuteAsync(operation);
         }
 
         public async Task UpdateSubscription(BotSubscriptionEntity device)
         {
             var operation = TableOperation.InsertOrReplace(device);
-            await devicesTable.ExecuteAsync(operation);
+            await subscriptionsTable.ExecuteAsync(operation);
         }
         
         public async Task UnregisterSubscription(string group, string channelId)
@@ -52,7 +52,7 @@ namespace DAC_DAL
                 ChannelId = channelId
             });
 
-            await devicesTable.ExecuteAsync(operation);
+            await subscriptionsTable.ExecuteAsync(operation);
         }
 
         public async Task<IEnumerable<BotSubscriptionEntity>> GetAllSubscriptionsInGroup(string group)

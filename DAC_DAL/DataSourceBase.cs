@@ -16,7 +16,7 @@ namespace DAC_DAL
         {
             cloudStorageAccount = CloudStorageAccount.Parse(DalEnvironmentVariables.StorageAccount);
 
-            if (devicesTable != null && spotsTable != null) return;
+            if (devicesTable != null && spotsTable != null && subscriptionsTable!=null) return;
 
 
             var tableClient = cloudStorageAccount.CreateCloudTableClient();
