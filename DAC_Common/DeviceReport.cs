@@ -7,8 +7,8 @@ namespace DAC_Common
         public DateTime? LastSeen { get; set; }
 
         public bool IsUnavailable => !LastSeen.HasValue ||
-                                     LastSeen.Value.AddMinutes(
+                                     LastSeen.Value.ToUniversalTime().AddMinutes(
                                          EnvironmentVariables.DelayInMinutesBetweenContacts *
-                                         EnvironmentVariables.NumberOfAllowedMissedContacts) < DateTime.Now;
+                                         EnvironmentVariables.NumberOfAllowedMissedContacts) < DateTime.UtcNow;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DAC_Common;
 using Microsoft.Bot.Connector;
 
 namespace DAC_BotFunctions
@@ -27,12 +28,12 @@ namespace DAC_BotFunctions
 
             return usePastTense ? "were" : "are";
         }
-        public static string GetCorrectNoun<T>(this IEnumerable<T> collection)
+        public static string GetCorrectNoun(this IEnumerable<Device> collection)
         {
             if (collection.Count() == 1)
-                return nameof(T);
+                return nameof(Device);
 
-            return $"{nameof(T)}s";
+            return $"{nameof(Device)}s";
         }
     }
 }

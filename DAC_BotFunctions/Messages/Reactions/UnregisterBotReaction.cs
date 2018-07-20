@@ -24,7 +24,8 @@ namespace DAC_BotFunctions.Messages.Reactions
         private async Task UnregisterSubscription(IMessageActivity message, string group)
         {
             var subscriptionFacade = new SubscriptionFacade();
-            await subscriptionFacade.UnregisterBotSubscription(message.GetChannelData<TeamsChannelData>().Team.Id, group);
+            string teamId = message.ChannelData.team.id;
+            await subscriptionFacade.UnregisterBotSubscription(teamId, group);
         }
 
         public static bool IsReactionValid(IMessageActivity message)

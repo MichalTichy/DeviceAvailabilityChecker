@@ -28,8 +28,15 @@ namespace DAC_BotFunctions.Messages.ProactiveMessages
 
                 if (deviceGroup.Any(t => t.IsUnavailable))
                 {
+                    var unavailableDevices = deviceGroup.Where(t => t.IsUnavailable).ToArray();
                     sb.AppendLine(
-                        $"In group {deviceGroup.Key} was detected that {Devices.Count} {Devices.GetCorrectNoun()} {Devices.GetCorrectVerb()} unavailable.");
+                        $"In group {deviceGroup.Key} was detected that {unavailableDevices.Count()} {unavailableDevices.GetCorrectNoun()} {unavailableDevices.GetCorrectVerb()} unavailable.");
+                }
+                else
+                {
+
+                    sb.AppendLine(
+                        $"In group {deviceGroup.Key} all devices are available.");
                 }
 
 
@@ -49,22 +56,18 @@ namespace DAC_BotFunctions.Messages.ProactiveMessages
         {
             StringBuilder sb = new StringBuilder();
 
-            var lengthOfLongestName = devices.Select(t => t.Name.Length).Max();
-            var lengthOfLongestAddress = devices.Select(t => t.Address.Length).Max();
-            var lengthOfLongestGroup = devices.Select(t => t.Group.Length).Max();
-
 
             sb.AppendLine(
-                $"{"ADDRESS".PadRight(lengthOfLongestAddress)} | {"NAME".PadRight(lengthOfLongestName)} | {"GROUP".PadRight(lengthOfLongestGroup)}| LAST SEEN");
+                "ADDRESS | NAME | GROUP | LAST SEEN");
 
             foreach (var offlineDevice in devices)
             {
-                var paddedName = offlineDevice.Name.ToString().PadRight(lengthOfLongestName);
-                var paddedAddress = offlineDevice.Address.ToString().PadRight(lengthOfLongestAddress);
-                var paddedGroup = offlineDevice.Group.ToString().PadRight(lengthOfLongestGroup);
+                var paddedName = offlineDevice.Name;
+                var paddedAddress = offlineDevice.Address;
+                var paddedGroup = offlineDevice.Group;
 
                 sb.AppendLine(
-                    $"{paddedAddress} | {paddedName} | {paddedGroup} |{offlineDevice.LastSeen?.ToString("g") ?? "Never seen"}");
+                    $"{paddedAddress} | {paddedName} | {paddedGroup} | {offlineDevice.LastSeen?.ToLocalTime().ToString("g") ?? "Never seen"}");
             }
 
             return sb.ToString();

@@ -28,7 +28,7 @@ namespace DAC_DAL
             var deviceSpot = new DeviceSpotEntity()
             {
                 DeviceEntity = device,
-                Date = DateTime.Now
+                Date = DateTime.UtcNow
             };
             deviceSpot.UpdateTableKeys();
             return deviceSpot;

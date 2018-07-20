@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DAC_Common;
 using DAC_DAL;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
@@ -12,8 +13,8 @@ namespace DAC_BotFunctions.Messages.Reactions
     {
         public async void Execute(IDialogContext context, IMessageActivity message)
         {
-
-            var result = await ListSubscriptions(message.GetChannelData<TeamsChannelData>().Team.Id);
+            string teamId = message.ChannelData.team.id;
+            var result = await ListSubscriptions(teamId);
 
             if (string.IsNullOrWhiteSpace(result))
             {

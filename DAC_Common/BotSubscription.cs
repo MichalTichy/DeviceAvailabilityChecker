@@ -17,7 +17,7 @@ namespace DAC_Common
 
     public class LastActivity
     {
-        public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime Created { get; set; } = DateTime.UtcNow;
         public string ConversationId { get; set; }
         public string ActitityId { get; set; }
     }
