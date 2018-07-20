@@ -19,7 +19,7 @@ namespace DAC_DAL
         }
         public async Task<DeviceSpotEntity> GetLastSpot(DeviceEntity device)
         {
-            var deviceSpots = await ExecuteQuery(spotsTable, GetLastSpotQuery(device));
+            var deviceSpots = await ExecuteQuery(spotsTable, GetLastSpotQuery(device),1);
             return deviceSpots.SingleOrDefault();
         }
 

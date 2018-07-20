@@ -11,6 +11,7 @@ namespace DAC_Common
 
         public string GroupName { get; set; }
         public string TenantId { get; set; }
+
         public LastActivity LastActivity { get; set; }
     }
 

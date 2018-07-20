@@ -23,7 +23,7 @@ namespace DAC_BotFunctions
 
                 var subscriptions = (await subscriptionFacade.GetAllSubscriptions()).ToArray();
 
-                foreach (var subscription in subscriptions.Where(t => DateTime.Now.Subtract(t.LastActivity.Created) > TimeSpan.FromDays(1)))
+                foreach (var subscription in subscriptions.Where(t => t.LastActivity!=null &&  DateTime.Now.Subtract(t.LastActivity.Created) > TimeSpan.FromDays(1)))
                 {
                     var connector = new ConnectorClient(new Uri(subscription.ServiceUrl), Environment.GetEnvironmentVariable("MicrosoftAppId"), Environment.GetEnvironmentVariable("MicrosoftAppPassword"));
                     await connector.Conversations.DeleteActivityAsync(subscription.LastActivity.ConversationId, subscription.LastActivity.ActitityId);

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DAC_DAL;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using Microsoft.Bot.Connector.Teams.Models;
 
 namespace DAC_BotFunctions.Messages.Reactions
 {
@@ -12,7 +13,7 @@ namespace DAC_BotFunctions.Messages.Reactions
         public async void Execute(IDialogContext context, IMessageActivity message)
         {
 
-            var result = await ListSubscriptions(message.ChannelId);
+            var result = await ListSubscriptions(message.GetChannelData<TeamsChannelData>().Team.Id);
 
             if (string.IsNullOrWhiteSpace(result))
             {

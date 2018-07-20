@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -41,7 +42,7 @@ namespace DAC_DAL
             }
         }
 
-        internal virtual async Task<IEnumerable<T>> ExecuteQuery<T>(CloudTable table, TableQuery<T> query) where T : ITableEntity, new()
+        internal virtual async Task<IEnumerable<T>> ExecuteQuery<T>(CloudTable table, TableQuery<T> query,int? take=null) where T : ITableEntity, new()
         {
             TableContinuationToken token = null;
             var entities = new List<T>();
@@ -50,9 +51,9 @@ namespace DAC_DAL
                 var queryResult = await table.ExecuteQuerySegmentedAsync(query, token);
                 entities.AddRange(queryResult.Results);
                 token = queryResult.ContinuationToken;
-            } while (token != null);
+            } while (token != null && (take==null || entities.Count<=take) );
 
-            return entities;
+            return take==null? entities : entities.Take(take.Value);
         }
     }
 }

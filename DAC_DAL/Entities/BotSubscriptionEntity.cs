@@ -1,16 +1,18 @@
-﻿using DAC_Common;
+﻿using System;
+using DAC_Common;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace DAC_DAL.Entities
 {
     public class BotSubscriptionEntity : TableEntity
     {
-        [IgnoreProperty]
-        public string ChannelId {
+        public string ChannelId { get; set; }
+
+        public string TeamId
+        {
             get => RowKey;
             set => RowKey = value;
         }
-        public string TeamId { get; set; }
 
         public string ServiceUrl { get; set; }
 
@@ -23,6 +25,8 @@ namespace DAC_DAL.Entities
 
         public string TenantId { get; set; }
 
-        public LastActivity LastActivity { get; set; }
+        public DateTime? LastActivityDate { get; set; }
+        public string ConversationId { get; set; }
+        public string ActitityId { get; set; }
     }
 }

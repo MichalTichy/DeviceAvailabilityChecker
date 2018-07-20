@@ -23,9 +23,9 @@ namespace DAC_DAL
             await SubscriptionDataSource.UpdateSubscription(entity);
         }
 
-        public async Task UnregisterBotSubscription(string channelId, string @group)
+        public async Task UnregisterBotSubscription(string teamId, string @group)
         {
-            await SubscriptionDataSource.UnregisterSubscription(@group,channelId);
+            await SubscriptionDataSource.UnregisterSubscription(@group,teamId);
         }
 
         public async Task<IEnumerable<BotSubscription>> GetAllSubscriptions()
@@ -38,9 +38,9 @@ namespace DAC_DAL
             var botSubscriptionEntities = await SubscriptionDataSource.GetAllSubscriptionsInGroup(group);
             return botSubscriptionEntities.Select(CreateBotSubscription);
         }
-        public async Task<IEnumerable<BotSubscription>> GetAllSubscriptionsWithChannelId(string channelId)
+        public async Task<IEnumerable<BotSubscription>> GetAllSubscriptionsWithChannelId(string teamId)
         {
-            var botSubscriptionEntities = await SubscriptionDataSource.GetAllSubscriptionsInChannel(channelId);
+            var botSubscriptionEntities = await SubscriptionDataSource.GetAllSubscriptionsInChannel(teamId);
             return botSubscriptionEntities.Select(CreateBotSubscription);
         }
 
@@ -52,21 +52,39 @@ namespace DAC_DAL
                 GroupName = subscription.GroupName,
                 ServiceUrl = subscription.ServiceUrl,
                 TeamId = subscription.TeamId,
-                TenantId = subscription.TeamId,
-                LastActivity = subscription.LastActivity
+                TenantId = subscription.TenantId,
+                LastActivityDate = subscription.LastActivity?.Created,
+                ActitityId = subscription.LastActivity?.ActitityId,
+                ConversationId = subscription.LastActivity?.ConversationId
             };
         }
 
         protected BotSubscription CreateBotSubscription(BotSubscriptionEntity entity)
         {
+
+            LastActivity activity;
+            if (entity.LastActivityDate == null)
+            {
+                activity = null;
+            }
+            else
+            {
+                activity = new LastActivity()
+                {
+                    ActitityId = entity.ActitityId,
+                    ConversationId = entity.ConversationId,
+                    Created = entity.LastActivityDate.Value,
+                };
+            }
+
             return new BotSubscription()
             {
                 ChannelId = entity.ChannelId,
                 GroupName = entity.GroupName,
                 ServiceUrl = entity.ServiceUrl,
                 TeamId = entity.TeamId,
-                TenantId = entity.TenantId,
-                LastActivity = entity.LastActivity
+                TenantId = entity.TeamId,
+                LastActivity = activity
             };
         }
     }
